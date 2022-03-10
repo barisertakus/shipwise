@@ -17,7 +17,7 @@ const StationCard = ({ name, location, navigation }) => {
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.location}>{location}</Text>
       </View>
-
+    
       <TouchableOpacity style={styles.icon} onPress={handleClickStation}>
         <Icon name="arrow-forward" size={24} />
       </TouchableOpacity>
