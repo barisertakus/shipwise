@@ -45,8 +45,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   headerTxt: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
+    marginBottom: 20,
   },
   imageContainer: {
     alignItems: "center",
