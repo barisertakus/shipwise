@@ -18,6 +18,8 @@ const Stations = ({ navigation }) => {
       <View style={styles.imageContainer}>
         <Image style={styles.image} source={require(IMAGE_URL)} />
       </View>
+
+      <View style={styles.stations}>
       <StationCard
         name="Station #1"
         location="Istanbul, Turkey"
@@ -33,6 +35,8 @@ const Stations = ({ navigation }) => {
         location="Ankara, Turkey"
         navigation={navigation}
       />
+      </View>
+ 
     </SafeAreaView>
   );
 };
@@ -57,5 +61,8 @@ const styles = StyleSheet.create({
     width: 250,
     height: 250,
     borderRadius: 50,
+  },
+  stations:{
+    marginBottom: 10
   },
 });
