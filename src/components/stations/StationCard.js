@@ -1,8 +1,16 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { useDispatch } from "react-redux";
+import { selectStation } from "../../features/StationSlice";
 
-const StationCard = ({name, location}) => {
+const StationCard = ({ name, location, navigation }) => {
+  const dispatch = useDispatch();
+  const handleClickStation = () => {
+    dispatch(selectStation({ name, location }));
+    navigation.navigate("ChargeStation");
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headers}>
@@ -10,8 +18,8 @@ const StationCard = ({name, location}) => {
         <Text style={styles.location}>{location}</Text>
       </View>
 
-      <TouchableOpacity style={styles.icon}>
-        <Icon name="arrow-forward" size={24}></Icon>
+      <TouchableOpacity style={styles.icon} onPress={handleClickStation}>
+        <Icon name="arrow-forward" size={24} />
       </TouchableOpacity>
     </View>
   );
