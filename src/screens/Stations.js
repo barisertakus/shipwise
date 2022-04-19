@@ -3,7 +3,8 @@ import React, { useLayoutEffect } from "react";
 import StationCard from "../components/stations/StationCard";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/core/Header";
-import { Image } from "react-native-elements";
+import { Image } from "native-base";
+
 
 const IMAGE_URL = "../../assets/images/logo.png";
 
@@ -16,7 +17,7 @@ const Stations = ({ navigation }) => {
       </View>
 
       <View style={styles.imageContainer}>
-        <Image style={styles.image} source={require(IMAGE_URL)} />
+        <Image alt="station" style={styles.image} source={require(IMAGE_URL)} />
       </View>
 
       <View style={styles.stations}>

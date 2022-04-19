@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { useSelector } from "react-redux";
 import { stationSelector } from "../../features/StationSlice";
-import { Image } from "react-native-elements";
+import { Image } from "native-base"
 import Header from "../../components/core/Header";
 
 const IMAGE_URL = "../../../assets/images/charge1.jpeg";
@@ -13,7 +13,7 @@ const StationHeader = () => {
     <View>
       <Header header={station.name} />
       <View style={styles.imageContainer}>
-        <Image style={styles.image} source={require(IMAGE_URL)} />
+        <Image alt="station-header" style={styles.image} source={require(IMAGE_URL)} />
       </View>
 
       <View style={styles.headers}>
