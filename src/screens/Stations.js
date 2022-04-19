@@ -1,16 +1,16 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useLayoutEffect } from "react";
 import StationCard from "../components/stations/StationCard";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/core/Header";
 import { Image } from "native-base";
+import SafeLayout from "../components/core/SafeLayout";
 
 
 const IMAGE_URL = "../../assets/images/logo.png";
 
 const Stations = ({ navigation }) => {
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeLayout>
       <Header header="Stations" noneBack />
       <View style={styles.header}>
         <Text style={styles.headerTxt}>Welcome to</Text>
@@ -38,7 +38,7 @@ const Stations = ({ navigation }) => {
       />
       </View>
  
-    </SafeAreaView>
+    </SafeLayout>
   );
 };
 

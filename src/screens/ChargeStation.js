@@ -1,8 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import StationHeader from "../components/chargeStation/StationHeader";
 import StationDetail from "../components/chargeStation/StationDetail";
+import SafeLayout from "../components/core/SafeLayout";
 
 const ChargeStation = ({navigation}) => {
 
@@ -11,7 +11,7 @@ const ChargeStation = ({navigation}) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeLayout style={styles.container}>
       <StationHeader />
       <View style={styles.stations}>
         <StationDetail header="About Station" content="It works!!" />
@@ -23,16 +23,13 @@ const ChargeStation = ({navigation}) => {
       <TouchableOpacity style={styles.button} onPress={navigateToAppointment}>
         <Text style={styles.btnText}>Book Appointment</Text>
       </TouchableOpacity>
-    </SafeAreaView>
+    </SafeLayout>
   );
 };
 
 export default ChargeStation;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   stations: {
     flex: 1,
   },
