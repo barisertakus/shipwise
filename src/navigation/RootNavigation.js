@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Stations from "../screens/Stations";
 import ChargeStation from "../screens/ChargeStation";
+import Appointment from "../screens/Appointment";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,7 +16,7 @@ function RootNavigation() {
       >
         <Stack.Screen name="Stations" component={Stations} />
         <Stack.Screen name="ChargeStation" component={ChargeStation} />
-
+        <Stack.Screen name="Appointment" component={Appointment} />
       </Stack.Navigator>
     </NavigationContainer>
   );

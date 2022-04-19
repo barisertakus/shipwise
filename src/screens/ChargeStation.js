@@ -4,7 +4,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import StationHeader from "../components/chargeStation/StationHeader";
 import StationDetail from "../components/chargeStation/StationDetail";
 
-const ChargeStation = () => {
+const ChargeStation = ({navigation}) => {
+
+  const navigateToAppointment = () => {
+    navigation.navigate("Appointment");
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StationHeader />
@@ -15,7 +20,7 @@ const ChargeStation = () => {
           content="Mon - Sat (08:30 AM - 09:00 PM)"
         />
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={navigateToAppointment}>
         <Text style={styles.btnText}>Book Appointment</Text>
       </TouchableOpacity>
     </SafeAreaView>

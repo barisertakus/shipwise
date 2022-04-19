@@ -3,6 +3,7 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
+import CustomText from "./CustomText";
 
 const Header = ({ header, noneBack }) => {
   const navigation = useNavigation();
@@ -19,7 +20,7 @@ const Header = ({ header, noneBack }) => {
           <Icon name="arrow-back" size={24} />
         </TouchableOpacity>
       )}
-      <Text style={styles.header}>{header}</Text>
+      <CustomText h5 title={header} />
       <View style={styles.empty} />
     </View>
   );
@@ -40,10 +41,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 10,
     borderRadius: 10,
-  },
-  header: {
-    fontSize: 18,
-    alignItems: "center",
   },
   empty: {
     padding: 21,
