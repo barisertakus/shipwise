@@ -66,20 +66,20 @@ const Container = styled.View`
 `;
 
 const Days = styled.View`
-  margin: ${hp(1)}px 0;
+  margin: ${hp(0.3)}px 0;
 `;
 
 const Times = styled.View``;
 
 const Details = styled.View`
-  margin: ${hp(2)}px 0;
+  margin: ${hp(1)}px 0;
 `;
 
 const Button = styled.TouchableOpacity`
   background-color: ${colors.button};
-  padding: 20px;
+  padding: ${hp(2.3)}px;
   align-items: center;
-  margin: ${hp(2)}px 0;
+  margin: ${hp(1)}px 0;
   border-radius: 20px;
   margin-bottom: 20px;
 `;
