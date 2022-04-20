@@ -3,6 +3,8 @@ import React from "react";
 import StationHeader from "../components/chargeStation/StationHeader";
 import StationDetail from "../components/chargeStation/StationDetail";
 import SafeLayout from "../components/core/SafeLayout";
+import { colors } from "../utils/colors";
+import CustomText from "../components/core/CustomText";
 
 const ChargeStation = ({navigation}) => {
 
@@ -21,7 +23,7 @@ const ChargeStation = ({navigation}) => {
         />
       </View>
       <TouchableOpacity style={styles.button} onPress={navigateToAppointment}>
-        <Text style={styles.btnText}>Book Appointment</Text>
+        <CustomText title="Book Appointment" style={styles.btnText} bold />
       </TouchableOpacity>
     </SafeLayout>
   );
@@ -34,7 +36,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   button: {
-    backgroundColor: "#3E64FF",
+    backgroundColor: colors.button,
     padding: 20,
     alignItems: "center",
     marginHorizontal: 20,
