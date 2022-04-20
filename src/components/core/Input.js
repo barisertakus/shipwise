@@ -1,6 +1,8 @@
 import { Input } from "native-base";
+import { colors } from "../../utils/colors";
 import { hp } from "../../utils/responsiveScreen";
 
-export default () => {
-  return <Input borderRadius={10} height="12" backgroundColor="#F8F8FA" />
+export default ({style}) => {
+  return <Input borderRadius={10} height="12" backgroundColor={colors.input} style={style} />
 }
+

@@ -4,6 +4,7 @@ import { TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import CustomText from "./CustomText";
+import { colors } from "../../utils/colors";
 
 const Header = ({ header, noneBack }) => {
   const navigation = useNavigation();
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 10,
     borderRadius: 10,
-    borderColor: "#F1F4F7",
+    borderColor: colors.border,
     borderWidth: 1
   },
   empty: {
