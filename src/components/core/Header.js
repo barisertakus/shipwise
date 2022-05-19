@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import CustomText from "./CustomText";
 import { colors } from "../../utils/colors";
+import { hp } from "../../utils/responsiveScreen";
 
 const Header = ({ header, noneBack }) => {
   const navigation = useNavigation();
@@ -32,8 +33,8 @@ export default Header;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    marginHorizontal: 20,
-    marginVertical: 10,
+    // marginHorizontal: 20,
+    marginVertical: hp(2),
     justifyContent: "space-between",
     alignItems: "center",
   },
