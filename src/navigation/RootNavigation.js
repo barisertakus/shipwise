@@ -4,6 +4,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Stations from "../screens/Stations";
 import ChargeStation from "../screens/ChargeStation";
 import Appointment from "../screens/Appointment";
+import Login from "../screens/Login";
+import Signup from "../screens/Signup";
 
 const Stack = createNativeStackNavigator();
 
@@ -12,9 +14,24 @@ function RootNavigation() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false, animation: "slide_from_left" }}
-        initialRouteName="Stations"
+        initialRouteName="Login"
       >
-        <Stack.Screen name="Stations" component={Stations} />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ gestureEnabled: false }}
+        />
+        <Stack.Screen
+          name="Signup"
+          component={Signup}
+          options={{ gestureEnabled: false }}
+        />
+
+        <Stack.Screen
+          name="Stations"
+          component={Stations}
+          options={{ gestureEnabled: false }}
+        />
         <Stack.Screen name="ChargeStation" component={ChargeStation} />
         <Stack.Screen name="Appointment" component={Appointment} />
       </Stack.Navigator>
