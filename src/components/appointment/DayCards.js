@@ -4,25 +4,31 @@ import styled from "styled-components";
 import { colors } from "../../utils/colors";
 import CustomText from "../../components/core/CustomText";
 import { hp, wp } from "../../utils/responsiveScreen";
+import { generateDateArray } from "../../utils/dateUtils";
 
-const fillArray = () => {
-  let arr = [];
-  for (let i = 1; i <= 30; i++) arr.push(i);
-  return arr;
-};
+const DayCards = ({ handlePress, selectedDate }) => {
+  const dates = useMemo(() => generateDateArray(), []);
 
-const DayCards = () => {
-  const days = useMemo(() => fillArray(), []);
-
+  const isActive = (date) => {
+    return selectedDate === date.day + date.date;
+  };
   return (
     <Container>
       <ScrollView horizontal>
-        {days.map((day,i) => (
-          <Card key={i} activeOpacity={0.4}>
-            <DateText h3 title={day} />
-            <DateText h5 title="MON" />
-          </Card>
-        ))}
+        {dates.map((date, i) => {
+          const active = isActive(date);
+          return (
+            <Card
+              key={i}
+              activeOpacity={0.4}
+              onPress={() => handlePress(date.day, date.date)}
+              active={active}
+            >
+              <DateText h3 title={date.day} active={active} />
+              <DateText h5 title={date.date} active={active} />
+            </Card>
+          );
+        })}
       </ScrollView>
     </Container>
   );
@@ -46,8 +52,9 @@ const Card = styled.TouchableOpacity`
   border-radius: 10px;
   margin: ${hp(2)}px ${wp(1)}px;
   margin-bottom: ${hp(1)}px;
+  background-color: ${(props) => (props.active ? colors.button : colors.white)};
 `;
 
 const DateText = styled(CustomText)`
-  color: ${colors.dateText};
+  color: ${(props) => (props.active ? colors.white : colors.dateText)}; ;
 `;

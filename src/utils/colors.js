@@ -3,4 +3,5 @@ export const colors = {
   input: "#F8F8FA",
   dateText: "#6B779B",
   button: "#3E64FF",
+  white : "#FFF"
 }

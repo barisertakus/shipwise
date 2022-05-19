@@ -1,7 +1,6 @@
 import { Box } from "native-base";
-import React, { useState } from "react";
-import { TouchableOpacity, KeyboardAvoidingView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
+import { KeyboardAvoidingView } from "react-native";
 import styled from "styled-components";
 import DayCards from "../components/appointment/DayCards";
 import TimeCards from "../components/appointment/TimeCards";
@@ -10,8 +9,9 @@ import DropdownList from "../components/core/Dropdown";
 import Header from "../components/core/Header";
 import Input from "../components/core/Input";
 import SafeLayout from "../components/core/SafeLayout";
-import { hp, wp } from "../utils/responsiveScreen";
 import { colors } from "../utils/colors";
+import { getToday } from "../utils/dateUtils";
+import { hp, wp } from "../utils/responsiveScreen";
 
 const list = [
   { label: "30 Minutes", value: "30min" },
@@ -20,8 +20,24 @@ const list = [
   { label: "120 Minutes", value: "120min" },
 ];
 
+const formatter = new Intl.DateTimeFormat('en', { month: 'long' });
+
 const Appointment = () => {
-  const [service, setService] = useState("");
+
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
+
+  const today = getToday();
+
+  const handlePressDay = (day, title) => {
+    setSelectedDate(day+title);
+  }
+
+  const handlePressTime = (time) => {
+    setSelectedTime(time);
+  }
+
+  const month = formatter.format(today);
 
   return (
     <SafeLayout>
@@ -29,12 +45,12 @@ const Appointment = () => {
         <Header header="New Appointment" />
         <Container>
           <Days>
-            <CustomText title="April, 2022" h3 bold />
-            <DayCards />
+            <CustomText title={`${month}, ${today.getFullYear()}`} h3 bold />
+            <DayCards handlePress={handlePressDay} selectedDate={selectedDate} />
           </Days>
           <Times>
             <CustomText title="Available Time" h3 bold />
-            <TimeCards />
+            <TimeCards handlePress={handlePressTime} selectedTime={selectedTime} />
           </Times>
           <CustomText title="Details" h3 bold />
 

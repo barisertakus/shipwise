@@ -6,38 +6,59 @@ import CustomText from "../../components/core/CustomText";
 import { hp, wp } from "../../utils/responsiveScreen";
 import { times } from "../../utils/times";
 
-const fillArray = () => {
-  let arr = [];
-  for (let i = 1; i <= 30; i++) arr.push(i);
-  return arr;
-  console.log;
-};
+const TimeCards = ({ handlePress, selectedTime }) => {
+  const isActive = (time) => {
+    return selectedTime === time;
+  };
 
-const TimeCards = () => {
   return (
     <Container>
       <ScrollView horizontal>
         <View>
           <CardGroup>
-            {times.slice(0, 16).map((time, i) => (
-              <Card key={i} activeOpacity={0.4}>
-                <DateText title={time} h5 />
-              </Card>
-            ))}
+            {times.slice(0, 16).map((time, i) => {
+              const active = isActive(time);
+              return (
+                <Card
+                  key={i}
+                  activeOpacity={0.4}
+                  active={active}
+                  onPress={() => handlePress(time)}
+                >
+                  <DateText title={time} h5 active={active} />
+                </Card>
+              );
+            })}
           </CardGroup>
           <CardGroup>
-            {times.slice(16, 32).map((time, i) => (
-              <Card key={i * 2} activeOpacity={0.4}>
-                <DateText title={time} h5 />
-              </Card>
-            ))}
+            {times.slice(16, 32).map((time, i) => {
+              const active = isActive(time);
+              return (
+                <Card
+                  key={i * 2}
+                  activeOpacity={0.4}
+                  active={active}
+                  onPress={() => handlePress(time)}
+                >
+                  <DateText title={time} h5 active={active} />
+                </Card>
+              );
+            })}
           </CardGroup>
           <CardGroup>
-            {times.slice(32, 48).map((time, i) => (
-              <Card key={i * 3} activeOpacity={0.4}>
-                <DateText title={time} h5 />
-              </Card>
-            ))}
+            {times.slice(32, 48).map((time, i) => {
+              const active = isActive(time);
+              return (
+                <Card
+                  key={i * 3}
+                  activeOpacity={0.4}
+                  active={active}
+                  onPress={() => handlePress(time)}
+                >
+                  <DateText title={time} h5 active={active} />
+                </Card>
+              );
+            })}
           </CardGroup>
         </View>
       </ScrollView>
@@ -63,6 +84,7 @@ const Card = styled.TouchableOpacity`
   padding: ${hp(1)}px;
   border-radius: 10px;
   margin: ${hp(1)}px ${wp(1)}px;
+  ${(props) => props.active && { backgroundColor: colors.button }}
 `;
 
 const CardGroup = styled.View`
@@ -71,5 +93,5 @@ const CardGroup = styled.View`
 `;
 
 const DateText = styled(CustomText)`
-  color: ${colors.dateText};
+  color: ${(props) => (props.active ? "white" : colors.dateText)};
 `;
