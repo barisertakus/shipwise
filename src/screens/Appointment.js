@@ -4,6 +4,7 @@ import { KeyboardAvoidingView } from "react-native";
 import styled from "styled-components";
 import DayCards from "../components/appointment/DayCards";
 import TimeCards from "../components/appointment/TimeCards";
+import Button from "../components/core/Button";
 import CustomText from "../components/core/CustomText";
 import Divider from "../components/core/Divider";
 import DropdownList from "../components/core/Dropdown";
@@ -21,40 +22,55 @@ const list = [
   { label: "120 Minutes", value: "120min" },
 ];
 
-const monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 const today = getToday();
 const month = monthNames[today.getMonth()];
 const Appointment = () => {
-
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
 
-
   const handlePressDay = (day, title) => {
-    setSelectedDate(day+title);
-  }
+    setSelectedDate(day + title);
+  };
 
   const handlePressTime = (time) => {
     setSelectedTime(time);
-  }
+  };
 
   return (
     <SafeLayout>
-      <KeyboardAvoidingView behavior="position">
-        <Header header="New Appointment" />
-        <Container>
-      
-            <CustomText title={`${month}, ${today.getFullYear()}`} h3 bold />
-            
+      <Container>
+        <KeyboardAvoidingView behavior="position">
+          <Header header="New Appointment" />
+
+          <CustomText title={`${month}, ${today.getFullYear()}`} h3 bold />
+
           <Days>
-            <DayCards handlePress={handlePressDay} selectedDate={selectedDate} />
+            <DayCards
+              handlePress={handlePressDay}
+              selectedDate={selectedDate}
+            />
           </Days>
           <Times>
             <CustomText title="Available Time" h3 bold />
-            <TimeCards handlePress={handlePressTime} selectedTime={selectedTime} />
+            <TimeCards
+              handlePress={handlePressTime}
+              selectedTime={selectedTime}
+            />
           </Times>
           <StyledDivider />
           <CustomText title="Details" h3 bold />
@@ -69,12 +85,10 @@ const Appointment = () => {
             <MarginText title="Description" p />
             <Input borderRadius={10} />
 
-            <Button>
-              <WhiteText title="Set Appointment" h5 bold />
-            </Button>
+            <Button title="Set Appointment" />
           </Details>
-        </Container>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </Container>
     </SafeLayout>
   );
 };
@@ -95,23 +109,10 @@ const Details = styled.View`
   margin: ${hp(1)}px 0;
 `;
 
-const Button = styled.TouchableOpacity`
-  background-color: ${colors.button};
-  padding: ${hp(2.3)}px;
-  align-items: center;
-  margin: ${hp(1)}px 0;
-  border-radius: 20px;
-  margin-bottom: 20px;
-`;
-
-const WhiteText = styled(CustomText)`
-  color: white;
-`;
-
 const MarginText = styled(CustomText)`
   margin-bottom: ${hp(1)}px;
 `;
 
 const StyledDivider = styled(Divider)`
-  margin: ${hp(1)}px 0 ;
-`
+  margin: ${hp(1)}px 0;
+`;

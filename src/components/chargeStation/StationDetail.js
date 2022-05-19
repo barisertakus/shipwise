@@ -16,7 +16,7 @@ export default StationDetail;
 
 const styles = StyleSheet.create({
   container:{
-    margin: 20,
+    marginVertical: 20,
   },
   header: {
     fontSize: 18,

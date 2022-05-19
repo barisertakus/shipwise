@@ -1,50 +1,40 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import StationHeader from "../components/chargeStation/StationHeader";
 import StationDetail from "../components/chargeStation/StationDetail";
 import SafeLayout from "../components/core/SafeLayout";
-import { colors } from "../utils/colors";
-import CustomText from "../components/core/CustomText";
+import Button from "../components/core/Button";
+import styled from "styled-components";
+import { wp } from "../utils/responsiveScreen";
 
-const ChargeStation = ({navigation}) => {
-
+const ChargeStation = ({ navigation }) => {
   const navigateToAppointment = () => {
     navigation.navigate("Appointment");
-  }
+  };
 
   return (
-    <SafeLayout style={styles.container}>
-      <StationHeader />
-      <View style={styles.stations}>
-        <StationDetail header="About Station" content="It works!!" />
-        <StationDetail
-          header="Working Time"
-          content="Mon - Sat (08:30 AM - 09:00 PM)"
-        />
-      </View>
-      <TouchableOpacity style={styles.button} onPress={navigateToAppointment}>
-        <CustomText title="Book Appointment" style={styles.btnText} bold />
-      </TouchableOpacity>
+    <SafeLayout>
+      <Container>
+        <StationHeader />
+        <Stations>
+          <StationDetail header="About Station" content="It works!!" />
+          <StationDetail
+            header="Working Time"
+            content="Mon - Sat (08:30 AM - 09:00 PM)"
+          />
+        </Stations>
+        <Button title="Book Appointment" handlePress={navigateToAppointment} />
+      </Container>
     </SafeLayout>
   );
 };
 
 export default ChargeStation;
 
-const styles = StyleSheet.create({
-  stations: {
-    flex: 1,
-  },
-  button: {
-    backgroundColor: colors.button,
-    padding: 20,
-    alignItems: "center",
-    marginHorizontal: 20,
-    borderRadius: 20,
-    marginBottom: 20,
-  },
-  btnText: {
-    color: "white",
-    fontSize: 18,
-  },
-});
+const Container = styled.View`
+  flex: 1;
+  padding: 0 ${wp(5)}px;
+`;
+
+const Stations = styled.View`
+  flex: 1;
+`;

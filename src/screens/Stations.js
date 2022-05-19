@@ -4,6 +4,8 @@ import StationCard from "../components/stations/StationCard";
 import Header from "../components/core/Header";
 import { Image } from "native-base";
 import SafeLayout from "../components/core/SafeLayout";
+import styled from "styled-components";
+import { wp } from "../utils/responsiveScreen";
 
 
 const IMAGE_URL = "../../assets/images/logo.png";
@@ -11,6 +13,8 @@ const IMAGE_URL = "../../assets/images/logo.png";
 const Stations = ({ navigation }) => {
   return (
     <SafeLayout>
+      <Container>
+     
       <Header header="Stations" noneBack />
       <View style={styles.header}>
         <Text style={styles.headerTxt}>Welcome to</Text>
@@ -37,12 +41,17 @@ const Stations = ({ navigation }) => {
         navigation={navigation}
       />
       </View>
- 
+    </Container>
     </SafeLayout>
   );
 };
 
 export default Stations;
+
+const Container = styled.View`
+  flex: 1;
+  padding: 0 ${wp(5)}px;
+`
 
 const styles = StyleSheet.create({
   header: {
