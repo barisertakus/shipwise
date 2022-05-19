@@ -1,5 +1,6 @@
 import { CheckIcon, Select } from "native-base";
 import React from "react";
+import { hp } from "../../utils/responsiveScreen";
 
 const DropdownList = ({ list, value, placeholder, handleChange }) => {
   return (
@@ -14,7 +15,8 @@ const DropdownList = ({ list, value, placeholder, handleChange }) => {
       }}
       mt={1}
       onValueChange={handleChange}
-      height="12"
+      maxHeight="12"
+      height={hp(6.1)}
     >
       {list.map((item, i) => (
         <Select.Item key={i} label={item.label} value={item.value} />

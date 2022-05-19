@@ -50,8 +50,7 @@ const Card = styled.TouchableOpacity`
   justify-content: space-between;
   padding: ${hp(1)}px;
   border-radius: 10px;
-  margin: ${hp(2)}px ${wp(1)}px;
-  margin-bottom: ${hp(1)}px;
+  margin: 0 ${wp(1)}px;
   background-color: ${(props) => (props.active ? colors.button : colors.white)};
 `;
 

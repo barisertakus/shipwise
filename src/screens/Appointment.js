@@ -5,6 +5,7 @@ import styled from "styled-components";
 import DayCards from "../components/appointment/DayCards";
 import TimeCards from "../components/appointment/TimeCards";
 import CustomText from "../components/core/CustomText";
+import Divider from "../components/core/Divider";
 import DropdownList from "../components/core/Dropdown";
 import Header from "../components/core/Header";
 import Input from "../components/core/Input";
@@ -20,14 +21,17 @@ const list = [
   { label: "120 Minutes", value: "120min" },
 ];
 
-const formatter = new Intl.DateTimeFormat('en', { month: 'long' });
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
+const today = getToday();
+const month = monthNames[today.getMonth()];
 const Appointment = () => {
 
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
 
-  const today = getToday();
 
   const handlePressDay = (day, title) => {
     setSelectedDate(day+title);
@@ -37,23 +41,23 @@ const Appointment = () => {
     setSelectedTime(time);
   }
 
-  const month = formatter.format(today);
-
   return (
     <SafeLayout>
       <KeyboardAvoidingView behavior="position">
         <Header header="New Appointment" />
         <Container>
-          <Days>
+      
             <CustomText title={`${month}, ${today.getFullYear()}`} h3 bold />
+            
+          <Days>
             <DayCards handlePress={handlePressDay} selectedDate={selectedDate} />
           </Days>
           <Times>
             <CustomText title="Available Time" h3 bold />
             <TimeCards handlePress={handlePressTime} selectedTime={selectedTime} />
           </Times>
+          <StyledDivider />
           <CustomText title="Details" h3 bold />
-
           <Details>
             <MarginText title="Full name" p />
             <Input />
@@ -82,7 +86,7 @@ const Container = styled.View`
 `;
 
 const Days = styled.View`
-  margin: ${hp(0.3)}px 0;
+  margin: ${hp(1)}px 0;
 `;
 
 const Times = styled.View``;
@@ -107,3 +111,7 @@ const WhiteText = styled(CustomText)`
 const MarginText = styled(CustomText)`
   margin-bottom: ${hp(1)}px;
 `;
+
+const StyledDivider = styled(Divider)`
+  margin: ${hp(1)}px 0 ;
+`
