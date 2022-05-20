@@ -15,7 +15,7 @@ export default Button;
 
 export const Container = styled.TouchableOpacity`
   background-color: ${(props)=> !props.secondary ? colors.button : colors.secondaryBtn};
-  padding: ${hp(2.3)}px;
+  padding: ${hp(2.1)}px;
   align-items: center;
   margin: ${hp(1)}px 0;
   border-radius: 20px;

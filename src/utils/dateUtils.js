@@ -5,7 +5,6 @@ export const getToday = () => {
 const getLastDayInMonth = () => {
   const today = getToday();
   const lastDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-  console.log()
   return lastDate.getDate();
 };
 

@@ -6,47 +6,46 @@ import { useNavigation } from "@react-navigation/native";
 import CustomText from "./CustomText";
 import { colors } from "../../utils/colors";
 import { hp } from "../../utils/responsiveScreen";
+import styled from "styled-components";
 
-const Header = ({ header, noneBack }) => {
+const Header = ({ header, noneBack, RightButton }) => {
   const navigation = useNavigation();
   const goBack = () => {
     if (navigation.canGoBack()) navigation.goBack();
   };
 
   return (
-    <View style={styles.container}>
+    <Container>
       {noneBack ? (
-        <View style={styles.empty} />
+        <EmptyView />
       ) : (
-        <TouchableOpacity style={styles.icon} onPress={goBack}>
+        <BackIcon onPress={goBack}>
           <Icon name="arrow-back" size={24} />
-        </TouchableOpacity>
+        </BackIcon>
       )}
       <CustomText h5 title={header} />
-      <View style={styles.empty} />
-    </View>
+      {RightButton ? <RightButton /> : <EmptyView />}
+    </Container>
   );
 };
 
 export default Header;
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    // marginHorizontal: 20,
-    marginVertical: hp(2),
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  icon: {
-    backgroundColor: "white",
-    justifyContent: "center",
-    padding: 10,
-    borderRadius: 10,
-    borderColor: colors.border,
-    borderWidth: 1
-  },
-  empty: {
-    padding: 21,
-  },
-});
+const Container = styled.View`
+  flex-direction: row;
+  margin: ${hp(2)}px 0;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const BackIcon = styled.TouchableOpacity`
+  background-color: ${colors.white};
+  justify-content: center;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid ${colors.border};
+`;
+
+const EmptyView = styled.View`
+  padding: 21px;
+`;

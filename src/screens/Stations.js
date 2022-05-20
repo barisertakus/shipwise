@@ -1,47 +1,67 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useLayoutEffect } from "react";
-import StationCard from "../components/stations/StationCard";
-import Header from "../components/core/Header";
-import { Image } from "native-base";
-import SafeLayout from "../components/core/SafeLayout";
+import { TouchableOpacity } from "react-native";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { wp } from "../utils/responsiveScreen";
-
+import CustomText from "../components/core/CustomText";
+import Header from "../components/core/Header";
+import SafeLayout from "../components/core/SafeLayout";
+import StationCard from "../components/stations/StationCard";
+import { logout, selectUser } from "../features/appSlice";
+import { colors } from "../utils/colors";
+import rf from "../utils/responsiveFont";
+import { hp, wp } from "../utils/responsiveScreen";
 
 const IMAGE_URL = "../../assets/images/logo.png";
 
 const Stations = ({ navigation }) => {
+  const dispatch = useDispatch();
+
+  const user = useSelector(selectUser);
+
+  const logoutAndNavigate = () => {
+    dispatch(logout());
+    navigation.navigate("Login");
+  };
+
+  const RightButton = () => {
+    return (
+      <TouchableOpacity onPress={logoutAndNavigate}>
+        <LogoutText title="Logout" />
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <SafeLayout>
       <Container>
-     
-      <Header header="Stations" noneBack />
-      <View style={styles.header}>
-        <Text style={styles.headerTxt}>Welcome to</Text>
-      </View>
+        <Header header="Stations" noneBack RightButton={RightButton} />
+        <Welcome>
+          <CustomText title="Welcome to" h2 bold />
+        </Welcome>
 
-      <View style={styles.imageContainer}>
-        <Image alt="station" style={styles.image} source={require(IMAGE_URL)} />
-      </View>
+        <ImageContainer>
+          <StyledImage alt="station" source={require(IMAGE_URL)} />
+          {user.username && <CustomText title={user.username} h3 />}
+        </ImageContainer>
 
-      <View style={styles.stations}>
-      <StationCard
-        name="Station #1"
-        location="Istanbul, Turkey"
-        navigation={navigation}
-      />
-      <StationCard
-        name="Station #2"
-        location="Sakarya, Turkey"
-        navigation={navigation}
-      />
-      <StationCard
-        name="Station #3"
-        location="Ankara, Turkey"
-        navigation={navigation}
-      />
-      </View>
-    </Container>
+        <StationCards>
+          <StationCard
+            name="Station #1"
+            location="Istanbul, Turkey"
+            navigation={navigation}
+          />
+          <StationCard
+            name="Station #2"
+            location="Sakarya, Turkey"
+            navigation={navigation}
+          />
+          <StationCard
+            name="Station #3"
+            location="Ankara, Turkey"
+            navigation={navigation}
+          />
+        </StationCards>
+      </Container>
     </SafeLayout>
   );
 };
@@ -51,28 +71,29 @@ export default Stations;
 const Container = styled.View`
   flex: 1;
   padding: 0 ${wp(5)}px;
-`
+`;
 
-const styles = StyleSheet.create({
-  header: {
-    alignItems: "center",
-    marginTop: 20,
-  },
-  headerTxt: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  imageContainer: {
-    alignItems: "center",
-    flex: 1,
-  },
-  image: {
-    width: 250,
-    height: 250,
-    borderRadius: 50,
-  },
-  stations:{
-    marginBottom: 10
-  },
-});
+const Welcome = styled.View`
+  align-items: center;
+  margin: ${hp(4)}px;
+`;
+
+const ImageContainer = styled.View`
+  align-items: center;
+  flex: 1;
+  margin-bottom: 10px;
+`;
+
+const StyledImage = styled.Image`
+  width: 250px;
+  height: 250px;
+  border-radius: 50px;
+`;
+
+const LogoutText = styled(CustomText)`
+  font-size: ${rf(14)}px;
+`;
+
+const StationCards = styled.View`
+  margin-bottom: ${hp(2)}px;
+`;

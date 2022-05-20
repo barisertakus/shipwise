@@ -3,7 +3,7 @@ import { TextField } from "rn-material-ui-textfield";
 import styled from "styled-components/native";
 import Button from "../components/core/Button";
 import SafeLayout from "../components/core/SafeLayout";
-import { login } from "../features/appSlice";
+import { login, selectUser } from "../features/appSlice";
 import { hp, wp } from "../utils/responsiveScreen";
 import CustomText from "../components/core/CustomText";
 import api from "../utils/api";
@@ -11,16 +11,22 @@ import { useDispatch } from "react-redux";
 import { View } from "react-native";
 import { colors } from "../utils/colors";
 import { TouchableOpacity } from "react-native";
+import { ActivityIndicator } from "react-native";
+import { useEffect } from "react";
+import deviceStorage from "../utils/deviceStorage";
+import { useSelector } from "react-redux";
 
 const Login = ({ navigation }) => {
+  const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
   const navigateSignup = () => {
-    navigation.navigate("Signup")
-  }
+    navigation.navigate("Signup");
+  };
 
   const handleLogin = () => {
     api
@@ -31,42 +37,72 @@ const Login = ({ navigation }) => {
       })
       .catch((err) => console.log(err))
       .finally(() => {
-        setEmail("");
+        setUsername("");
         setPassword("");
+        navigation.navigate("Stations");
       });
-    navigation.navigate("Stations");
   };
+
+  useEffect(() => {
+    console.log("token yükleniyor");
+    if (user.username) {
+      navigation.navigate("Stations");
+    } else {
+      deviceStorage
+        .loadItem("token")
+        .then((response) => {
+          api
+            .post("auth/getUserFromToken", { token: response })
+            .then((response) => {
+              const { name, username, token } = response.data;
+              dispatch(login({ name, username, token }));
+              // setLoading(false);
+            })
+            .catch((err) => {
+              console.log(err);
+              setLoading(false);
+            });
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+    }
+  }, [user]);
 
   return (
     <SafeLayout>
-      <Container>
-        <Content>
-          <StyledText title="Account" h2 bold />
-          <Inputs>
-            <TextField
-              label="Username"
-              value={username}
-              onChangeText={setUsername}
-              autoCapitalize="none"
-            />
-            <TextField
-              label="Password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              autoCapitalize="none"
-            />
-          </Inputs>
-          <Button handlePress={handleLogin} title="Login" secondary />
-          <AskSignup>
-            <CustomText title="Don't have an account?" h5 />
-            <TouchableOpacity onPress={navigateSignup}>
-              <SignupText title="Sign up" h5 />
-            </TouchableOpacity>
-          </AskSignup>
-        </Content>
-        <Bottom />
-      </Container>
+      {loading ? (
+        <ActivityIndicator size="large" color="#00ff00" style={{ flex: 1 }} />
+      ) : (
+        <Container>
+          <Content>
+            <StyledText title="Account" h2 bold />
+            <Inputs>
+              <TextField
+                label="Username"
+                value={username}
+                onChangeText={setUsername}
+                autoCapitalize="none"
+              />
+              <TextField
+                label="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                autoCapitalize="none"
+              />
+            </Inputs>
+            <Button handlePress={handleLogin} title="Login" secondary />
+            <AskSignup>
+              <CustomText title="Don't have an account?" h5 />
+              <TouchableOpacity onPress={navigateSignup}>
+                <SignupText title="Sign up" h5 />
+              </TouchableOpacity>
+            </AskSignup>
+          </Content>
+          <Bottom />
+        </Container>
+      )}
     </SafeLayout>
   );
 };

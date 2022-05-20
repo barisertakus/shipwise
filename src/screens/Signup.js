@@ -25,32 +25,29 @@ const Signup = ({ navigation }) => {
     dispatch(changeLanguage(languageName));
   };
 
-  const [token,setToken] = useState("");
+  const [token, setToken] = useState("");
 
   const handleSignup = () => {
     api
       .post("auth/signup", { username, name, password })
       .then((response) => {
         console.log(response.data);
-        navigation.navigate("Login");
       })
-      .catch((err) => console.log(err));
-    console.log("pw signup", password);
-    navigation.navigate("Login");
-
-    // dispatch(Signup({ email, password }));
-    // navigation.navigate("AccountInfo");
-    // setUsername("");
-    // setPassword("");
-    // setName("");
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setUsername("");
+        setPassword("");
+        setName("");
+        navigation.navigate("Login");
+      });
   };
 
-  useEffect(()=>{
-    deviceStorage.loadItem("token").then(resp=>{
-      setToken(resp)
-      console.log(resp)
-    })
-  },[])
+  useEffect(() => {
+    deviceStorage.loadItem("token").then((resp) => {
+      setToken(resp);
+      console.log(resp);
+    });
+  }, []);
 
   return (
     <SafeLayout>
@@ -79,8 +76,6 @@ const Signup = ({ navigation }) => {
             />
           </Inputs>
           <Button handlePress={handleSignup} title="Signup" secondary />
-          { user.username && <CustomText title={user.username + " " + user.name} /> }
-          { token ? <CustomText title={token} /> : null}
         </Content>
         <Bottom />
       </Container>

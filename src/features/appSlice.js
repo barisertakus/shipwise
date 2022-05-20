@@ -15,7 +15,8 @@ const appSlice = createSlice({
       deviceStorage.saveItem("token", token);
     },
     logout: (state) => {
-      state.user = {}
+      state.user = {};
+      deviceStorage.removeItem("token");
     },
   },
 });
