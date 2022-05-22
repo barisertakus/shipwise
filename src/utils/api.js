@@ -9,4 +9,9 @@ const api = axios.create({
   baseURL: baseUrl,
 });
 
+deviceStorage.loadItem("token").then((response) => {
+  api.defaults.headers.Authorization = `Bearer ${response}`;
+  console.log("responseToken", response)
+});
+
 export default api;
