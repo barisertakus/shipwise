@@ -44,7 +44,6 @@ const Login = ({ navigation }) => {
   };
 
   useEffect(() => {
-    console.log("token yükleniyor");
     if (user.username) {
       navigation.navigate("Stations");
     } else {

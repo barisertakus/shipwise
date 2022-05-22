@@ -4,13 +4,16 @@ import styled from "styled-components";
 import { colors } from "../../utils/colors";
 import CustomText from "../../components/core/CustomText";
 import { hp, wp } from "../../utils/responsiveScreen";
-import { generateDateArray } from "../../utils/dateUtils";
+import { generateDateArray, getMonthIndex } from "../../utils/dateUtils";
 
-const DayCards = ({ handlePress, selectedDate }) => {
-  const dates = useMemo(() => generateDateArray(), []);
+const DayCards = ({ handlePress, selectedDate, month, year }) => {
+  const dates = useMemo(
+    () => generateDateArray(getMonthIndex(month), year),
+    [month, year]
+  );
 
   const isActive = (date) => {
-    return selectedDate === date.day + date.date;
+    return selectedDate === date.day;
   };
   return (
     <Container>
@@ -21,7 +24,7 @@ const DayCards = ({ handlePress, selectedDate }) => {
             <Card
               key={i}
               activeOpacity={0.4}
-              onPress={() => handlePress(date.day, date.date)}
+              onPress={() => handlePress(date.day)}
               active={active}
             >
               <DateText h3 title={date.day} active={active} />

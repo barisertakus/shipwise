@@ -1,6 +1,6 @@
 import { Box } from "native-base";
 import { useState } from "react";
-import { KeyboardAvoidingView } from "react-native";
+import { KeyboardAvoidingView, TouchableOpacity, View } from "react-native";
 import styled from "styled-components";
 import DayCards from "../components/appointment/DayCards";
 import TimeCards from "../components/appointment/TimeCards";
@@ -11,58 +11,145 @@ import DropdownList from "../components/core/Dropdown";
 import Header from "../components/core/Header";
 import Input from "../components/core/Input";
 import SafeLayout from "../components/core/SafeLayout";
-import { colors } from "../utils/colors";
-import { getToday } from "../utils/dateUtils";
 import { hp, wp } from "../utils/responsiveScreen";
+import Icon from "@expo/vector-icons/AntDesign";
+import api from "../utils/api";
+import {
+  isFirstMonth,
+  isLastMonth,
+  getFirstMonth,
+  getNextMonth,
+  getLastMonth,
+  getPrevMonth,
+  isThisMonth,
+  getMonthIndex,
+  getToday,
+  getMonth,
+} from "../utils/dateUtils";
+import WarnPopup from "../components/appointment/WarnPopup";
 
 const list = [
-  { label: "30 Minutes", value: "30min" },
-  { label: "60 Minutes", value: "60min" },
-  { label: "90 Minutes", value: "90min" },
-  { label: "120 Minutes", value: "120min" },
+  { label: "30 Minutes", value: 30 },
+  { label: "60 Minutes", value: 60 },
+  { label: "90 Minutes", value: 90 },
+  { label: "120 Minutes", value: 120 },
 ];
 
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
 
-const today = getToday();
-const month = monthNames[today.getMonth()];
-const Appointment = () => {
-  const [selectedDate, setSelectedDate] = useState("");
+// new Date(year,getMonthIndex(month),selectedDate).toISOString().split("T")[0]
+
+const Appointment = ({navigation}) => {
+  const today = new Date();
+  const [month, setMonth] = useState(getMonth(today.getMonth()));
+  const [year, setYear] = useState(today.getFullYear());
+  const [selectedDate, setSelectedDate] = useState(today.getDate());
   const [selectedTime, setSelectedTime] = useState("");
+  const [duration, setDuration] = useState(0);
+  const [fullName, setFullName] = useState("");
+  const [description, setDescription] = useState("");
 
-  const handlePressDay = (day, title) => {
-    setSelectedDate(day + title);
+  // modal
+  const [visible, setVisible] = useState(false);
+  const [header, setHeader] = useState("");
+  const [content, setContent] = useState("");
+
+  const handlePressDay = (day) => {
+    setSelectedDate(day);
+    setSelectedTime("");
   };
 
   const handlePressTime = (time) => {
     setSelectedTime(time);
   };
 
+  const handleNextMonth = () => {
+    if (isLastMonth(month)) {
+      setMonth(getFirstMonth());
+      setYear(year + 1);
+    } else {
+      setMonth(getNextMonth(month));
+      setSelectedDate("");
+    }
+  };
+
+  const handlePrevMonth = () => {
+    if (!isThisMonth(getMonthIndex(month), year)) {
+      if (isFirstMonth(month)) {
+        setMonth(getLastMonth());
+        setYear(year - 1);
+      } else {
+        setMonth(getPrevMonth(month));
+        setSelectedDate("");
+      }
+    }
+  };
+
+  const showMessage = (message) => {
+    setContent(message);
+    setVisible(true);
+  };
+
+  const handleAppointment = () => {
+    setHeader("Missing Fields");
+    if (!selectedDate) {
+      showMessage("You must choose a date!");
+    } else if (!selectedTime) {
+      showMessage("You must choose a time!");
+    } else if (!duration) {
+      showMessage("You must choose a duration!");
+    } else {
+      const scheduledTime = selectedTime;
+      const monthParam = ("00" + getMonthIndex(month)).slice(-2);
+      const scheduledDate = new Date(`${year}-${monthParam}-${selectedDate}`);
+
+      api
+        .post("appointment", {
+          fullName,
+          duration,
+          description,
+          scheduledDate,
+          scheduledTime,
+        })
+        .then((response) => {
+          console.log("Appointment has been created.");
+          console.log(response.data)
+          navigation.navigate("Stations");
+        })
+        .catch((err) => console.log(err));
+    }
+    // getAppointments()
+  };
+
+  const getAppointments = () => {
+    const monthParam = ("00" + getMonthIndex(month)).slice(-2);
+    api.get(`appointment?scheduledDate=${year}-${monthParam}-${selectedDate}`).then(response=>{
+      console.log(response.data)
+    })
+  }
+
   return (
     <SafeLayout>
       <Container>
         <KeyboardAvoidingView behavior="position">
           <Header header="New Appointment" />
-
-          <CustomText title={`${month}, ${today.getFullYear()}`} h3 bold />
+          <Month>
+            <CustomText title={`${month}, ${year}`} h3 bold />
+            <Icons>
+              <TouchableOpacity onPress={handlePrevMonth}>
+                <StyledIcon name="caretleft" size={24} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleNextMonth}>
+                <Icon name="caretright" size={24} color="black" />
+              </TouchableOpacity>
+            </Icons>
+          </Month>
 
           <Days>
             <DayCards
               handlePress={handlePressDay}
               selectedDate={selectedDate}
+              month={month}
+              year={year}
             />
           </Days>
           <Times>
@@ -70,24 +157,37 @@ const Appointment = () => {
             <TimeCards
               handlePress={handlePressTime}
               selectedTime={selectedTime}
+              month={month}
+              year={year}
+              selectedDate={selectedDate}
             />
           </Times>
           <StyledDivider />
           <CustomText title="Details" h3 bold />
           <Details>
             <MarginText title="Full name" p />
-            <Input />
+            <Input value={fullName} handleChange={setFullName} />
             <CustomText title="Duration" p />
             <Box w="full">
-              <DropdownList list={list} />
+              <DropdownList
+                list={list}
+                value={duration}
+                handleChange={setDuration}
+              />
             </Box>
 
             <MarginText title="Description" p />
-            <Input borderRadius={10} />
+            <Input value={description} handleChange={setDescription} />
 
-            <Button title="Set Appointment" />
+            <Button title="Set Appointment" handlePress={handleAppointment} />
           </Details>
         </KeyboardAvoidingView>
+        <WarnPopup
+          open={visible}
+          setOpen={setVisible}
+          content={content}
+          header={header}
+        />
       </Container>
     </SafeLayout>
   );
@@ -115,4 +215,17 @@ const MarginText = styled(CustomText)`
 
 const StyledDivider = styled(Divider)`
   margin: ${hp(1)}px 0;
+`;
+
+const Month = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const Icons = styled.View`
+  flex-direction: row;
+`;
+
+const StyledIcon = styled(Icon)`
+  margin-right: ${wp(3)}px;
 `;
