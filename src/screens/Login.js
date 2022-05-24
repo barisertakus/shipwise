@@ -34,6 +34,7 @@ const Login = ({ navigation }) => {
       .then((response) => {
         const { name, username, token } = response.data;
         dispatch(login({ name, username, token }));
+        api.defaults.headers.Authorization = `Bearer ${token}`;
       })
       .catch((err) => console.log(err))
       .finally(() => {

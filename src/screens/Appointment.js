@@ -27,6 +27,7 @@ import {
   getMonth,
 } from "../utils/dateUtils";
 import WarnPopup from "../components/appointment/WarnPopup";
+import { useEffect } from "react";
 
 const list = [
   { label: "30 Minutes", value: 30 },
@@ -35,10 +36,9 @@ const list = [
   { label: "120 Minutes", value: 120 },
 ];
 
-
 // new Date(year,getMonthIndex(month),selectedDate).toISOString().split("T")[0]
 
-const Appointment = ({navigation}) => {
+const Appointment = ({ navigation }) => {
   const today = new Date();
   const [month, setMonth] = useState(getMonth(today.getMonth()));
   const [year, setYear] = useState(today.getFullYear());
@@ -47,6 +47,7 @@ const Appointment = ({navigation}) => {
   const [duration, setDuration] = useState(0);
   const [fullName, setFullName] = useState("");
   const [description, setDescription] = useState("");
+  const [fullSlots, setFullSlots] = useState([]);
 
   // modal
   const [visible, setVisible] = useState(false);
@@ -66,20 +67,31 @@ const Appointment = ({navigation}) => {
     if (isLastMonth(month)) {
       setMonth(getFirstMonth());
       setYear(year + 1);
+      setSelectedDate(1);
     } else {
-      setMonth(getNextMonth(month));
-      setSelectedDate("");
+      const nextMonth = getNextMonth(month);
+      setMonth(nextMonth);
+      let checkThisMonth = isThisMonth(getMonthIndex(nextMonth), year);
+      let dateWillStart = checkThisMonth ? getToday().getDate() : 1;
+      setSelectedDate(dateWillStart);
     }
   };
 
   const handlePrevMonth = () => {
     if (!isThisMonth(getMonthIndex(month), year)) {
       if (isFirstMonth(month)) {
-        setMonth(getLastMonth());
+        const prevMonth = getLastMonth();
+        setMonth(prevMonth);
         setYear(year - 1);
+        let checkThisMonth = isThisMonth(getMonthIndex(prevMonth), year);
+        let dateWillStart = checkThisMonth ? getToday().getDate() : 1;
+        setSelectedDate(dateWillStart);
       } else {
-        setMonth(getPrevMonth(month));
-        setSelectedDate("");
+        const prevMonth = getPrevMonth(month);
+        setMonth(prevMonth);
+        let checkThisMonth = isThisMonth(getMonthIndex(prevMonth), year);
+        let dateWillStart = checkThisMonth ? getToday().getDate() : 1;
+        setSelectedDate(dateWillStart);
       }
     }
   };
@@ -112,7 +124,7 @@ const Appointment = ({navigation}) => {
         })
         .then((response) => {
           console.log("Appointment has been created.");
-          console.log(response.data)
+          console.log(response.data);
           navigation.navigate("Stations");
         })
         .catch((err) => console.log(err));
@@ -122,10 +134,22 @@ const Appointment = ({navigation}) => {
 
   const getAppointments = () => {
     const monthParam = ("00" + getMonthIndex(month)).slice(-2);
-    api.get(`appointment?scheduledDate=${year}-${monthParam}-${selectedDate}`).then(response=>{
-      console.log(response.data)
-    })
-  }
+    const dayParam = ("00" + selectedDate).slice(-2);
+    console.log("year,monthparam,selecTDate", year, monthParam, dayParam);
+    api
+      .get(`appointment?scheduledDate=${year}-${monthParam}-${dayParam}`)
+      .then((response) => {
+        setFullSlots(response.data);
+      });
+  };
+
+  const isFullSlot = (time) => {
+    return fullSlots.some((slot) => slot.scheduledTime === time);
+  };
+
+  useEffect(() => {
+    getAppointments();
+  }, [selectedDate, month]);
 
   return (
     <SafeLayout>
@@ -160,6 +184,8 @@ const Appointment = ({navigation}) => {
               month={month}
               year={year}
               selectedDate={selectedDate}
+              isFullSlot={isFullSlot}
+              fullSlots={fullSlots}
             />
           </Times>
           <StyledDivider />
