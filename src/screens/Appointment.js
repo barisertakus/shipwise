@@ -28,6 +28,8 @@ import {
 } from "../utils/dateUtils";
 import WarnPopup from "../components/appointment/WarnPopup";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { stationSelector } from "../features/StationSlice";
 
 const list = [
   { label: "30 Minutes", value: 30 },
@@ -48,6 +50,7 @@ const Appointment = ({ navigation }) => {
   const [fullName, setFullName] = useState("");
   const [description, setDescription] = useState("");
   const [fullSlots, setFullSlots] = useState([]);
+  const { id } = useSelector(stationSelector);
 
   // modal
   const [visible, setVisible] = useState(false);
@@ -110,34 +113,36 @@ const Appointment = ({ navigation }) => {
     } else if (!duration) {
       showMessage("You must choose a duration!");
     } else {
-      const scheduledTime = selectedTime;
-      const monthParam = ("00" + getMonthIndex(month)).slice(-2);
-      const scheduledDate = new Date(`${year}-${monthParam}-${selectedDate}`);
-
-      api
-        .post("appointment", {
-          fullName,
-          duration,
-          description,
-          scheduledDate,
-          scheduledTime,
-        })
-        .then((response) => {
-          console.log("Appointment has been created.");
-          console.log(response.data);
-          navigation.navigate("Stations");
-        })
-        .catch((err) => console.log(err));
+      saveAppointment();
     }
-    // getAppointments()
+  };
+
+  const saveAppointment = () => {
+    const scheduledTime = selectedTime;
+    const monthParam = ("00" + getMonthIndex(month)).slice(-2);
+    const scheduledDate = new Date(`${year}-${monthParam}-${selectedDate}`);
+    console.log(id)
+    api
+      .post("appointment", {
+        fullName,
+        duration,
+        description,
+        scheduledDate,
+        scheduledTime,
+        stationId : id
+      })
+      .then((response) => {
+        console.log("Appointment has been created.");
+        navigation.navigate("Stations");
+      })
+      .catch((err) => console.log(err));
   };
 
   const getAppointments = () => {
     const monthParam = ("00" + getMonthIndex(month)).slice(-2);
     const dayParam = ("00" + selectedDate).slice(-2);
-    console.log("year,monthparam,selecTDate", year, monthParam, dayParam);
     api
-      .get(`appointment?scheduledDate=${year}-${monthParam}-${dayParam}`)
+      .get(`appointment?scheduledDate=${year}-${monthParam}-${dayParam}&stationId=${id}`)
       .then((response) => {
         setFullSlots(response.data);
       });

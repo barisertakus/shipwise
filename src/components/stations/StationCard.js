@@ -7,10 +7,9 @@ import styled from "styled-components";
 import CustomText from "../core/CustomText";
 import { hp, wp } from "../../utils/responsiveScreen";
 
-const StationCard = ({ name, location, navigation }) => {
-  const dispatch = useDispatch();
+const StationCard = ({ name, location, navigation, handleClick }) => {
   const handleClickStation = () => {
-    dispatch(selectStation({ name, location }));
+    handleClick();
     navigation.navigate("ChargeStation");
   };
 

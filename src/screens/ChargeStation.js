@@ -5,8 +5,13 @@ import SafeLayout from "../components/core/SafeLayout";
 import Button from "../components/core/Button";
 import styled from "styled-components";
 import { wp } from "../utils/responsiveScreen";
+import { useSelector } from "react-redux";
+import { stationSelector } from "../features/StationSlice";
 
 const ChargeStation = ({ navigation }) => {
+
+  const station = useSelector(stationSelector);
+
   const navigateToAppointment = () => {
     navigation.navigate("Appointment");
   };
@@ -16,10 +21,10 @@ const ChargeStation = ({ navigation }) => {
       <Container>
         <StationHeader />
         <Stations>
-          <StationDetail header="About Station" content="It works!!" />
+          <StationDetail header="About Station" content={station.about} />
           <StationDetail
-            header="Working Time"
-            content="Mon - Sat (08:30 AM - 09:00 PM)"
+            header="Working Hours"
+            content={station.shift}
           />
         </Stations>
         <Button title="Book Appointment" handlePress={navigateToAppointment} />

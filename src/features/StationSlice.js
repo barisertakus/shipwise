@@ -1,8 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  id: 0,
   name: "",
   location: "",
+  about: "",
+  shift: "",
 };
 
 const stationSlice = createSlice({
@@ -10,9 +13,12 @@ const stationSlice = createSlice({
   initialState,
   reducers: {
     selectStation: (state, action) => {
-      const { name, location } = action.payload;
+      const { id, name, location, about, shift } = action.payload;
+      state.id = id;
       state.location = location;
       state.name = name;
+      state.about = about;
+      state.shift = shift;
     },
   },
 });
