@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { useEffect } from "react";
 import { TouchableOpacity } from "react-native";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -7,6 +9,8 @@ import Header from "../components/core/Header";
 import SafeLayout from "../components/core/SafeLayout";
 import StationCard from "../components/stations/StationCard";
 import { logout, selectUser } from "../features/appSlice";
+import { selectStation } from "../features/StationSlice";
+import api from "../utils/api";
 import { colors } from "../utils/colors";
 import rf from "../utils/responsiveFont";
 import { hp, wp } from "../utils/responsiveScreen";
@@ -16,6 +20,7 @@ const IMAGE_URL = "../../assets/images/logo.png";
 const Stations = ({ navigation }) => {
   const dispatch = useDispatch();
 
+  const [stations, setStations] = useState([]);
   const user = useSelector(selectUser);
 
   const logoutAndNavigate = () => {
@@ -31,6 +36,18 @@ const Stations = ({ navigation }) => {
     );
   };
 
+  const handleClick = (station) => {
+    const { id, about, location, name, shift } = station;
+    dispatch(selectStation({ id, name, location, about, shift }));
+  };
+
+  useEffect(() => {
+    api
+      .get("station/getAll")
+      .then((response) => setStations(response.data))
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <SafeLayout>
       <Container>
@@ -45,21 +62,18 @@ const Stations = ({ navigation }) => {
         </ImageContainer>
 
         <StationCards>
-          <StationCard
-            name="Station #1"
-            location="Istanbul, Turkey"
-            navigation={navigation}
-          />
-          <StationCard
-            name="Station #2"
-            location="Sakarya, Turkey"
-            navigation={navigation}
-          />
-          <StationCard
-            name="Station #3"
-            location="Ankara, Turkey"
-            navigation={navigation}
-          />
+          {stations.map((station) => {
+            const { id, about, location, name, shift } = station;
+            return (
+              <StationCard
+                key={id}
+                name={name}
+                location={location}
+                navigation={navigation}
+                handleClick={()=>handleClick(station)}
+              />
+            );
+          })}
         </StationCards>
       </Container>
     </SafeLayout>
